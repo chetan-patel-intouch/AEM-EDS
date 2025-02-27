@@ -32,5 +32,5 @@ export default function makeDraggable(el) {
     document.onmousemove = elementDrag;
   }
 
-  el.querySelector('#aem-sidekick-exp-title').onmousedown = dragMouseDown;
+  el.querySelector('#aem-sidekick-exp-handle').onmousedown = dragMouseDown;
 }

@@ -18,17 +18,16 @@ export default async function runExp() {
   palette.id = MAIN_SELECTOR;
 
   // Title
-  const title = document.createElement('p');
-  title.innerText = 'Experimentation';
-  title.id = `${MAIN_SELECTOR}-title`;
+  const handle = document.createElement('div');
+  handle.id = `${MAIN_SELECTOR}-handle`;
 
   // Iframe
   const iframe = document.createElement('iframe');
-  iframe.src = 'https://da.live/app/aemsites/da-block-collection/tools/sidekick/plugins/experimentation/mfe/mfe?ref=local';
+  iframe.src = 'https://main--da-live--adobe.aem.live/plugins/exp?nx=exp';
   iframe.allow = 'clipboard-write *';
 
   // Append
-  palette.append(title, iframe);
+  palette.append(handle, iframe);
 
   makeDraggable(palette);
   document.body.append(palette);

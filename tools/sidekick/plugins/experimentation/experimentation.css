@@ -11,16 +11,20 @@
   font-family: 'Adobe Clean', adobe-clean, sans-serif;
   display: grid;
   align-content: start;
-  grid-template-rows: auto 1fr;
-  box-shadow: 0 0 2px 0 rgb(0 0 0 / 12%), 0 3px 6px 0 rgb(0 0 0 / 4%), 0 4px 8px 0 rgb(0 0 0 / 8%);
+  grid-template-rows: 1fr;
+  box-shadow:
+    0 0 2px 0 rgb(0 0 0 / 12%),
+    0 3px 6px 0 rgb(0 0 0 / 4%),
+    0 4px 8px 0 rgb(0 0 0 / 8%);
 }
 
-#aem-sidekick-exp-title {
+#aem-sidekick-exp-handle {
+  position: absolute;
+  width: 46px;
+  height: 56px;
   cursor: move;
   margin: 0;
-  font-weight: 700;
-  padding: 8px 12px;
-  font-size: 16px;
+  background: no-repeat center / 20px url('/tools/sidekick/plugins/experimentation/img/exp-handle.svg');
 }
 
 #aem-sidekick-exp iframe {
