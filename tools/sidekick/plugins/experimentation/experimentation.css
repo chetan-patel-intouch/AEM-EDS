@@ -1,0 +1,30 @@
+#aem-sidekick-exp {
+  width: 374px;
+  height: 600px;
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  font-family: 'Adobe Clean', adobe-clean, sans-serif;
+  display: grid;
+  align-content: start;
+  grid-template-rows: auto 1fr;
+  box-shadow: 0 0 2px 0 rgb(0 0 0 / 12%), 0 3px 6px 0 rgb(0 0 0 / 4%), 0 4px 8px 0 rgb(0 0 0 / 8%);
+}
+
+#aem-sidekick-exp-title {
+  cursor: move;
+  margin: 0;
+  font-weight: 700;
+  padding: 8px 12px;
+  font-size: 16px;
+}
+
+#aem-sidekick-exp iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
