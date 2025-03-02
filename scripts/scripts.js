@@ -159,16 +159,17 @@ async function loadPage() {
 }
 
 // DA Live Preview
+/* eslint-disable import/no-unresolved */
 (async function loadDa() {
-  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
-  // eslint-disable-next-line import/no-unresolved
-  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+  const { searchParams } = new URL(window.location.href);
+  if (searchParams.get('dapreview')) {
+    import('https://da.live/scripts/dapreview.js')
+      .then(({ default: daPreview }) => daPreview(loadPage));
+  }
+  if (searchParams.get('daexperiment')) {
+    import('https://exp--nexter--da-sites.aem.live/nx/public/plugins/exp/exp.js')
+      .then(({ default: daExp }) => daExp());
+  }
 }());
-
-// (async function loadEdit() {
-//   const html = document.body.outerHTML;
-//   const init = (await import('./context.js')).default;
-//   init(html);
-// }());
 
 loadPage();
