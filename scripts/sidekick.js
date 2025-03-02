@@ -1,14 +1,20 @@
-// Production
-// import runExp from 'https://da.live/nx/public/plugins/exp/exp.js';
+/* eslint-disable import/no-cycle */
+import { NX_ORIGIN } from './scripts.js';
 
-// Branch dev
-import runExp from 'https://exp--nexter--da-sites.aem.live/nx/public/plugins/exp/exp.js';
+let expMod;
 
-// Local dev
-// import runExp from 'http://localhost:6456/nx/public/plugins/exp/exp.js';
+async function loadExp() {
+  if (!expMod) {
+    // First import will run automatically
+    expMod = await import(`${NX_ORIGIN}/nx/public/plugins/exp/exp.js`);
+    return;
+  }
+  // 2nd time, call the func
+  expMod.default();
+}
 
 (async function sidekick() {
   const sk = document.querySelector('aem-sidekick');
   if (!sk) return;
-  sk.addEventListener('custom:experimentation', runExp);
+  sk.addEventListener('custom:experimentation', loadExp);
 }());

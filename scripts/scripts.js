@@ -158,17 +158,19 @@ async function loadPage() {
   loadSidekick();
 }
 
-// DA Live Preview
-/* eslint-disable import/no-unresolved */
+const { origin } = window.location;
+export const NX_ORIGIN = origin.includes('localhost') ? 'http://localhost:6456' : 'https://exp--nexter--da-sites.aem.live';
+
 (async function loadDa() {
   const { searchParams } = new URL(window.location.href);
+
+  /* eslint-disable import/no-unresolved */
   if (searchParams.get('dapreview')) {
     import('https://da.live/scripts/dapreview.js')
       .then(({ default: daPreview }) => daPreview(loadPage));
   }
   if (searchParams.get('daexperiment')) {
-    import('https://exp--nexter--da-sites.aem.live/nx/public/plugins/exp/exp.js')
-      .then(({ default: daExp }) => daExp());
+    import(`${NX_ORIGIN}/nx/public/plugins/exp/exp.js`);
   }
 }());
 
