@@ -165,10 +165,10 @@ async function loadPage() {
   import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
 }());
 
-// (async function loadEdit() {
-//   const html = document.body.outerHTML;
-//   const init = (await import('./context.js')).default;
-//   init(html);
-// }());
+(async function loadEdit() {
+  const html = document.body.outerHTML;
+  const init = (await import('./context.js')).default;
+  init(html);
+}());
 
 loadPage();
