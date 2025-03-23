@@ -1,14 +1,26 @@
 import { loadCSS } from './aem.js';
 
 const SECTION_SELECTOR = '.section';
-const EDITABLE_SELECTORS = 'h1, h2, p';
+const BLOCK_SELECTOR = '[data-block-name]';
+
+const EDITABLES = [
+  { selector: 'h1', nodeName: 'H1', label: 'Heading 1'},
+  { selector: 'h2', nodeName: 'H2', label: 'Heading 2'},
+  { selector: 'p', nodeName: 'P', label: 'Paragraph'},
+  { selector: 'ul', nodeName: 'UL', label: 'List' },
+  { selector: 'img', nodeName: 'IMG', label: 'Image'},
+];
+const EDITABLE_SELECTORS = EDITABLES.map((edit) => edit.selector).join(', ');
+
+const label = document.createElement('p');
+label.className = 'nx-label';
 
 const overlay = document.createElement('div');
 overlay.className = 'nx-overlay';
 
 const editor = document.createElement('div');
 editor.className = 'nx-editor';
-overlay.append(editor);
+overlay.append(editor, label);
 
 document.body.append(overlay);
 
@@ -31,27 +43,54 @@ function handleEditable(editable) {
   });
 }
 
+function getLabel(el) {
+  if (el.dataset.blockName) return el.dataset.blockName;
+  if (el.classList.contains('section')) return 'Section';
+  console.log(el.nodeName);
+  return EDITABLES.find((editable) => {
+    console.log(editable.nodeName);
+    return editable.nodeName === el.nodeName;
+  })?.label;
+}
+
 function handleSection(section) {
-  section.addEventListener('mouseenter', (e) => {
-    const rect = section.getBoundingClientRect();
+  section.addEventListener('mouseover', (e) => {
+
+    // Attempt to resolve the editable
+    const el = e.target.dataset.edit ? e.target : e.target.parentElement;
+
+    if (!el.dataset.edit) return;
+
+    const elLabel = getLabel(el);
+    if (elLabel) label.innerText = elLabel;
+
+    const rect = el.getBoundingClientRect();
 
     const { scrollTop, scrollLeft } = document.documentElement;
-    const top = scrollTop + rect.top;
-    const left = scrollLeft + rect.left;
+    const top = (scrollTop + rect.top) - 6;
+    const left = (scrollLeft + rect.left) - 6;
+
+    console.log(top, left);
 
     // Position relative to the document
     editor.style = `left: ${left}px; top: ${top}px; width: ${rect.width}px; height: ${rect.height}px`;
+    editor.classList.add('is-visible');
   });
-  section.addEventListener('mouseleave', (e) => {
+  section.addEventListener('mouseout', (e) => {
     editor.style = '';
+    label.innerText = '';
+    editor.classList.remove('is-visible');
   });
 }
 
-export default async function init() {
+(async function loadEdit() {
   await loadCSS('/styles/context.css');
-  const sections = document.body.querySelectorAll(SECTION_SELECTOR);
-  sections.forEach((section) => { handleSection(section); });
+  const els = document.body.querySelectorAll(`${SECTION_SELECTOR}, ${BLOCK_SELECTOR}, ${EDITABLE_SELECTORS}`);
+  els.forEach((el) => {
+    el.dataset.edit = true;
+    handleSection(el);
+  });
 
   const editables = document.body.querySelectorAll(EDITABLE_SELECTORS);
   editables.forEach((editable) => { handleEditable(editable); });
-}
+}());
