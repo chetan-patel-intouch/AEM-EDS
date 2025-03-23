@@ -1,3 +1,20 @@
+html {
+    position: relative;
+}
+
+.nx-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    .nx-editor {
+      position: relative;
+      background: rgba(38 127 235 / 28%);
+      outline: 2px solid #2680eb;
+      outline-offset: 2px;
+    }
+}
+
 [data-edit] {
     border: 1px solid transparent;
     box-sizing: border-box;
