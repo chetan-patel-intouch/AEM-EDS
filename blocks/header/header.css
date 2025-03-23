@@ -47,7 +47,6 @@ header nav[aria-expanded='true'] {
 
 header nav p {
   margin: 0;
-
   /* line-height: 1; BOILERPLATE DOESN'T HAVE a P tag in header, */
 }
 
