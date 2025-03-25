@@ -7,12 +7,11 @@ const EDITABLES = [
   { selector: 'h1', nodeName: 'H1', label: 'Heading 1'},
   { selector: 'h2', nodeName: 'H2', label: 'Heading 2'},
   { selector: 'p', nodeName: 'P', label: 'Paragraph'},
-  { selector: 'ul', nodeName: 'UL', label: 'List' },
   { selector: 'img', nodeName: 'IMG', label: 'Image'},
 ];
 const EDITABLE_SELECTORS = EDITABLES.map((edit) => edit.selector).join(', ');
 
-const label = document.createElement('p');
+const label = document.createElement('div');
 label.className = 'nx-label';
 
 const overlay = document.createElement('div');
@@ -53,16 +52,36 @@ function getLabel(el) {
   })?.label;
 }
 
+function getTree(el) {
+  const tree = [getLabel(el)];
+  let traverse = el;
+  while (traverse) {
+    traverse = traverse.parentElement.closest('[data-edit]');
+    if (!traverse) break;
+    tree.push(getLabel(traverse));
+  }
+  return tree;
+}
+
+function setTree(tree) {
+  const list = document.createElement('ul');
+  tree.forEach((label) => {
+    list.insertAdjacentHTML('beforeend', `<li>${label}</li>`);
+  });
+  label.append(list);
+}
+
 function handleSection(section) {
   section.addEventListener('mouseover', (e) => {
 
     // Attempt to resolve the editable
-    const el = e.target.dataset.edit ? e.target : e.target.parentElement;
+    const el = e.target.dataset.edit ? e.target : e.target.closest('[data-edit]');
 
     if (!el.dataset.edit) return;
 
-    const elLabel = getLabel(el);
-    if (elLabel) label.innerText = elLabel;
+    label.innerHTML = '';
+    const tree = getTree(el);
+    setTree(tree);
 
     const rect = el.getBoundingClientRect();
 
@@ -70,15 +89,18 @@ function handleSection(section) {
     const top = (scrollTop + rect.top) - 6;
     const left = (scrollLeft + rect.left) - 6;
 
-    console.log(top, left);
-
     // Position relative to the document
-    editor.style = `left: ${left}px; top: ${top}px; width: ${rect.width}px; height: ${rect.height}px`;
+    editor.style = `
+      left: ${left}px;
+      top: ${top}px;
+      width: ${rect.width}px;
+      height: ${rect.height}px`;
     editor.classList.add('is-visible');
   });
+
   section.addEventListener('mouseout', (e) => {
     editor.style = '';
-    label.innerText = '';
+    label.innerHTML = '';
     editor.classList.remove('is-visible');
   });
 }
